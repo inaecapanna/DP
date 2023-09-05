@@ -11,6 +11,7 @@ urlpatterns = [
     path('cadastrar',
     views.QuestionCreateView.as_view(),
     name = 'question-create')
+
 ]
 
 # .\venv\Scripts\activate.bat
