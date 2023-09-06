@@ -40,7 +40,7 @@ def get_context_data(self, **kwargs):
     context['form_title'] = 'Criando uma pergunta'
 
     return context
-    
+
 
 from django.views.generic.edit import CreateView, UpdateView
 
@@ -55,4 +55,13 @@ def get_context_data(self, **kwargs):
     context['form_title'] = 'Editando a pergunta'
 
     return context
+
+
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
+class QuestionDeleteView(DeleteView):
+    model = Question
+    template_name = 'polls/question_confirm_delete_form.html'
+    success_url = reverse_lazy('polls_list')
+
 

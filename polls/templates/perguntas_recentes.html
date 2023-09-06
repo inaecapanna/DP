@@ -7,14 +7,22 @@ Mega Enquetes
 <a href="{% url 'question-create' %}" class="btn btn-lg btn-primary font-weight-bold">
     + Pergunta
 </a>
-<a href="{% url 'question-create' %}" class="btn btn-lg btn-primary font-weight-bold">
-    Editar
-</a> 
-
+        
 {% for question in latest_question_list %}
+
 <article>
     <h2>Em: {{ question.pub_date|date:"d / m / Y" }}</h2>
-    <p>{{ question.question_text }}</p>
+    <p>{{ question.question_text }}
+
+        <a href="{% url 'poll_edit' pk=question.id %}" class="btn btn-lg btn-primary font-weight-bold">
+            Editar
+        </a>
+        <a href="{% url 'poll_delete' pk=question.id %}" class="btn btn-lg btn-primary font-weight-bold">
+            Excluir
+        </a>  
+
+    </p>
+    
 </article>
 {% endfor %}
 {% endblock %} <!-- fecha o bloco content -->
