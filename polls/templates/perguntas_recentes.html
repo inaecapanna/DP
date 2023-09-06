@@ -19,7 +19,10 @@ Mega Enquetes
         </a>
         <a href="{% url 'poll_delete' pk=question.id %}" class="btn btn-lg btn-primary font-weight-bold">
             Excluir
-        </a>  
+        </a> 
+        <a href="{% url 'poll_show' pk=question.id %}" class="btn btn-lg btn-primary font-weight-bold">
+            Ver
+        </a>          
 
     </p>
     
