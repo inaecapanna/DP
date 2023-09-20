@@ -58,11 +58,18 @@ def get_context_data(self, **kwargs):
 
 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib import messages
 
 class QuestionDeleteView(DeleteView):
     model = Question
     template_name = 'polls/question_confirm_delete_form.html'
-    success_url = reverse_lazy('polls_list')
+    success_url = reverse_lazy('polls_all') 
+    success_message = 'Pergunta excluída com sucesso.'
+
+
+def form_valid(self, request, *args, **kwargs):
+    messages.success(self.request, self.success_message)
+    return super(QuestionDeleteView, self).form_valid(request, *args, **kwargs)
 
 
 from django.views.generic import DetailView, ListView, TemplateView
