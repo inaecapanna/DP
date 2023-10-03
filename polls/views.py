@@ -35,11 +35,11 @@ class QuestionCreateView(CreateView):
     fields = ('question_text', 'pub_date', )
     success_url = reverse_lazy('polls_list') 
 
-def get_context_data(self, **kwargs):
-    context = super(QuestionCreateView, self).get_context_data(**kwargs)
-    context['form_title'] = 'Criando uma pergunta'
+    def get_context_data(self, **kwargs):
+        context = super(QuestionCreateView, self).get_context_data(**kwargs)
+        context['form_title'] = 'Criando uma pergunta'
 
-    return context
+        return context
 
 
 from django.views.generic.edit import CreateView, UpdateView
@@ -50,26 +50,31 @@ class QuestionUpdateView(UpdateView):
     fields = ('question_text', 'pub_date', )
     success_url = reverse_lazy('polls_list')
 
-def get_context_data(self, **kwargs):
-    context = super(QuestionUpdateView, self).get_context_data(**kwargs)
-    context['form_title'] = 'Editando a pergunta'
+    def get_context_data(self, **kwargs):
+        context = super(QuestionUpdateView, self).get_context_data(**kwargs)
+        context['form_title'] = 'Editando a pergunta'
 
-    return context
+        return context
+
+
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib import messages
 
-class QuestionDeleteView(DeleteView):
+
+class QuestionDeleteView(LoginRequiredMixin, DeleteView):
     model = Question
     template_name = 'polls/question_confirm_delete_form.html'
     success_url = reverse_lazy('polls_all') 
     success_message = 'Pergunta excluída com sucesso.'
 
 
-def form_valid(self, request, *args, **kwargs):
-    messages.success(self.request, self.success_message)
-    return super(QuestionDeleteView, self).form_valid(request, *args, **kwargs)
+    def form_valid(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(QuestionDeleteView, self).form_valid(request, *args, **kwargs)
 
 
 from django.views.generic import DetailView, ListView, TemplateView
@@ -88,3 +93,4 @@ class QuestionListView(ListView):
 
 class SobreTemplateView(TemplateView):
     template_name = 'polls/sobre.html'
+
