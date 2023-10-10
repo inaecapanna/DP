@@ -142,6 +142,7 @@ LOGIN_REDIRECT_URL = '/admin'
 
 LOGOUT_REDIRECT_URL = '/admin'
 
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
