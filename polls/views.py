@@ -1,6 +1,15 @@
 from django.forms.models import BaseModelForm
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
+from django.views.generic.edit import CreateView
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView, UpdateView
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib import messages
+from django.views.generic import DetailView, ListView, TemplateView
+
 
 # Create your views here.
 from polls.models import Question, Choice
@@ -27,10 +36,8 @@ def ultimas_perguntas(request):
     context = {'latest_question_list': latest_question_list}
     return render(request, 'perguntas_recentes.html', context)
 
-from django.views.generic.edit import CreateView
-from django.urls import reverse_lazy
 
-class QuestionCreateView(CreateView):
+class QuestionCreateView(LoginRequiredMixin, CreateView):
     model = Question
     template_name = 'polls/question_form.html'
     fields = ('question_text', 'pub_date', )
@@ -42,8 +49,11 @@ class QuestionCreateView(CreateView):
 
         return context
 
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        messages.success(self.request, self.success_message)
+        return super(QuestionCreateView, self).form_valid(form)
 
-from django.views.generic.edit import CreateView, UpdateView
 
 class QuestionUpdateView(UpdateView):
     model = Question
@@ -63,14 +73,6 @@ class QuestionUpdateView(UpdateView):
         return context
 
 
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-
-
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.contrib import messages
-
-
 class QuestionDeleteView(LoginRequiredMixin, DeleteView):
     model = Question
     template_name = 'polls/question_confirm_delete_form.html'
@@ -82,8 +84,6 @@ class QuestionDeleteView(LoginRequiredMixin, DeleteView):
         messages.success(self.request, self.success_message)
         return super(QuestionDeleteView, self).form_valid(request, *args, **kwargs)
 
-
-from django.views.generic import DetailView, ListView, TemplateView
 
 class QuestionDetailView(DetailView):
     model = Question
